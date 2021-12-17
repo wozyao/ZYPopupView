@@ -16,6 +16,8 @@ NS_ASSUME_NONNULL_BEGIN
 + (instancetype)cellWithTableView:(UITableView *)tableView;
 /** 商品信息 */
 @property(strong, nonatomic) ZYGoodsInfo *goodsInfo;
+/** 加减操作 */
+@property (copy, nonatomic) void (^handleBlock)(BOOL plus);
 
 @end
 

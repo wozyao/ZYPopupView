@@ -20,7 +20,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property(assign, nonatomic) CGFloat alpha;
 /** 当前显示状态，默认隐藏 */
 @property(assign, nonatomic) BOOL isShow;
-/** 最大高度，默认默认与customView的高度一致 */
+/** 最大高度，默认300 */
 @property(assign, nonatomic) CGFloat maximumHeight;
 
 /** 在view上展示ZYPopupView */

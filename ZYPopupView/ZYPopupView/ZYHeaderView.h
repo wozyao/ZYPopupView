@@ -14,6 +14,9 @@ NS_ASSUME_NONNULL_BEGIN
 
 + (instancetype)headerView;
 
+/** 清空购物车 */
+@property (copy, nonatomic) void (^handleBlock)(void);
+
 @end
 
 NS_ASSUME_NONNULL_END

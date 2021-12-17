@@ -19,4 +19,10 @@
     return headerView;
 }
 
+- (IBAction)btnDidClick:(UIButton *)sender {
+    if (self.handleBlock) {
+        self.handleBlock();
+    }
+}
+
 @end

@@ -35,8 +35,11 @@
                         <state key="normal" title="-">
                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
+                        <connections>
+                            <action selector="minusBtnDidClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="yXH-C9-TGs"/>
+                        </connections>
                     </button>
-                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UiV-jw-YA3">
+                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="--" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="UiV-jw-YA3">
                         <rect key="frame" x="250" y="9.5" width="20" height="21"/>
                         <constraints>
                             <constraint firstAttribute="width" constant="20" id="VVq-TV-Zuq"/>
@@ -56,6 +59,9 @@
                         <state key="normal" title="+">
                             <color key="titleColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         </state>
+                        <connections>
+                            <action selector="plusBtnDidClick:" destination="KGk-i7-Jjw" eventType="touchUpInside" id="Q2Y-tn-YSc"/>
+                        </connections>
                     </button>
                 </subviews>
                 <constraints>

@@ -39,6 +39,18 @@
     self.numLabel.text = [NSString stringWithFormat:@"%ld", (long)goodsInfo.num];
 }
 
+- (IBAction)minusBtnDidClick:(UIButton *)sender {
+    if (self.handleBlock) {
+        self.handleBlock(NO);
+    }
+}
+
+- (IBAction)plusBtnDidClick:(UIButton *)sender {
+    if (self.handleBlock) {
+        self.handleBlock(YES);
+    }
+}
+
 - (void)setSelected:(BOOL)selected animated:(BOOL)animated {
     [super setSelected:selected animated:animated];
 

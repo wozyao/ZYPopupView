@@ -15,8 +15,8 @@ static const NSTimeInterval Duration_Interval = 0.3;
 
 @interface ZYPopupView ()
 
-/** 父View */
-//@property(weak, nonatomic) UIView *superView;
+/** tableView */
+@property(weak, nonatomic) UITableView *tableView;
 /** 浅黑色蒙版 */
 @property(weak, nonatomic) UIView *maskView;
 
@@ -28,7 +28,6 @@ static const NSTimeInterval Duration_Interval = 0.3;
     if (self = [super init]) {
         self.cornerRadius = 10;
         self.alpha = 0.5;
-        self.maximumHeight = customView.bounds.size.height;
         self.frame = customView.bounds;
         self.backgroundColor = [UIColor whiteColor];
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)];
@@ -37,8 +36,22 @@ static const NSTimeInterval Duration_Interval = 0.3;
         maskLayer.path = maskPath.CGPath;
         self.layer.mask = maskLayer;
         [self addSubview:customView];
+        [self subViewIsContainTableView:self];
+        self.maximumHeight = 300;
     }
     return self;
+}
+
+- (void)subViewIsContainTableView:(UIView *)view {
+    for (UIView *subView in view.subviews) {
+        if ([subView isKindOfClass:[UITableView class]]) {
+            self.tableView = (UITableView *)subView;
+            NSLog(@"tableView.frame = %@，tableView.contentSize = %@", NSStringFromCGRect(self.tableView.frame), NSStringFromCGSize(self.tableView.contentSize));
+            break;
+        } else {
+            [self subViewIsContainTableView:subView];
+        }
+    }
 }
 
 - (void)setAlpha:(CGFloat)alpha {
@@ -47,9 +60,14 @@ static const NSTimeInterval Duration_Interval = 0.3;
 
 - (void)setMaximumHeight:(CGFloat)maximumHeight {
     _maximumHeight = maximumHeight;
-//    CGRect rect = self.frame;
-//    rect.size.height = maximumHeight;
-//    self.frame = rect;
+    CGRect rect = self.frame;
+    CGRect tableViewRect = self.tableView.frame;
+    if (rect.size.height > maximumHeight) {
+        rect.size.height = maximumHeight;
+        self.frame = rect;
+        tableViewRect.size.height = maximumHeight - tableViewRect.origin.y;
+        self.tableView.frame = tableViewRect;
+    }
 }
 
 - (void)showInView:(UIView *)view {
@@ -59,9 +77,16 @@ static const NSTimeInterval Duration_Interval = 0.3;
     maskView.alpha = 0;
     UITapGestureRecognizer *tapGR = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(dismiss)];
     [maskView addGestureRecognizer:tapGR];
-    [view addSubview:maskView];
     self.maskView = maskView;
-    [view addSubview:self];
+   
+    if (view.subviews.count) {
+        UIView *lastView = view.subviews.lastObject;
+        [view insertSubview:maskView belowSubview:lastView];
+        [view insertSubview:self belowSubview:lastView];
+    } else {
+        [view addSubview:maskView];
+        [view addSubview:self];
+    }
 
     self.transform = CGAffineTransformMakeTranslation(0, view.bounds.size.height);
     [UIView animateWithDuration:Duration_Interval animations:^{
@@ -80,16 +105,16 @@ static const NSTimeInterval Duration_Interval = 0.3;
         self.transform = CGAffineTransformMakeTranslation(0, Screen_Height);
         self.maskView.alpha = 0;
     } completion:^(BOOL finished) {
-        [self removeFromSuperview];
         [self.maskView removeFromSuperview];
+        [self removeFromSuperview];
     }];
 }
 
 - (void)layoutSubviews {
     [super layoutSubviews];
     
-    [self.superview sendSubviewToBack:self];
-    [self.superview sendSubviewToBack:self.maskView];
+//    [self.superview sendSubviewToBack:self];
+//    [self.superview sendSubviewToBack:self.maskView];
     
 }
 

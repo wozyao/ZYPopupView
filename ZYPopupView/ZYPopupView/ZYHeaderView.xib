@@ -27,6 +27,9 @@
                     <state key="normal" title=" 清空购物车" image="besom">
                         <color key="titleColor" red="0.40000000000000002" green="0.40000000000000002" blue="0.40000000000000002" alpha="1" colorSpace="calibratedRGB"/>
                     </state>
+                    <connections>
+                        <action selector="btnDidClick:" destination="avY-MD-nI6" eventType="touchUpInside" id="ksF-14-Ujv"/>
+                    </connections>
                 </button>
             </subviews>
             <viewLayoutGuide key="safeArea" id="vZZ-2o-bnL"/>
