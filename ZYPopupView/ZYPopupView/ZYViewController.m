@@ -77,7 +77,7 @@ static const CGFloat Margin = 100;
         [self.popupView dismiss];
     } else {
         self.popupView = [[ZYPopupView alloc] initWithCustomView:view];
-//        self.popupView.maximumHeight = 300;
+        self.popupView.maximumHeight = 400;
         [self.popupView showInView:self.view];
         [self.view sendSubviewToBack:self.addGoodsBtn];
     }

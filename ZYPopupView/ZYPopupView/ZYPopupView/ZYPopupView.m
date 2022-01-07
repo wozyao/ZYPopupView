@@ -19,6 +19,8 @@ static const NSTimeInterval Duration_Interval = 0.3;
 @property(weak, nonatomic) UITableView *tableView;
 /** 浅黑色蒙版 */
 @property(weak, nonatomic) UIView *maskView;
+/** 初始frame */
+@property(assign, nonatomic) CGRect initialFrame;
 
 @end
 
@@ -29,6 +31,7 @@ static const NSTimeInterval Duration_Interval = 0.3;
         self.cornerRadius = 10;
         self.alpha = 0.5;
         self.frame = customView.bounds;
+        self.maximumHeight = 300;
         self.backgroundColor = [UIColor whiteColor];
         UIBezierPath *maskPath = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerAllCorners cornerRadii:CGSizeMake(self.cornerRadius, self.cornerRadius)];
         CAShapeLayer *maskLayer = [[CAShapeLayer alloc] init];
@@ -37,7 +40,7 @@ static const NSTimeInterval Duration_Interval = 0.3;
         self.layer.mask = maskLayer;
         [self addSubview:customView];
         [self subViewIsContainTableView:self];
-        self.maximumHeight = 300;
+        
     }
     return self;
 }
@@ -46,7 +49,6 @@ static const NSTimeInterval Duration_Interval = 0.3;
     for (UIView *subView in view.subviews) {
         if ([subView isKindOfClass:[UITableView class]]) {
             self.tableView = (UITableView *)subView;
-            NSLog(@"tableView.frame = %@，tableView.contentSize = %@", NSStringFromCGRect(self.tableView.frame), NSStringFromCGSize(self.tableView.contentSize));
             break;
         } else {
             [self subViewIsContainTableView:subView];
@@ -60,17 +62,19 @@ static const NSTimeInterval Duration_Interval = 0.3;
 
 - (void)setMaximumHeight:(CGFloat)maximumHeight {
     _maximumHeight = maximumHeight;
-    CGRect rect = self.frame;
-    CGRect tableViewRect = self.tableView.frame;
-    if (rect.size.height > maximumHeight) {
-        rect.size.height = maximumHeight;
-        self.frame = rect;
-        tableViewRect.size.height = maximumHeight - tableViewRect.origin.y;
-        self.tableView.frame = tableViewRect;
-    }
 }
 
 - (void)showInView:(UIView *)view {
+    
+    CGRect rect = self.frame;
+    CGRect tableViewRect = self.tableView.frame;
+    if (rect.size.height > self.maximumHeight) {
+        rect.size.height = self.maximumHeight;
+        self.frame = rect;
+        tableViewRect.size.height = self.maximumHeight - tableViewRect.origin.y;
+        self.tableView.frame = tableViewRect;
+    }
+    
     self.isShow = YES;
     UIView *maskView = [[UIView alloc] initWithFrame:[UIScreen mainScreen].bounds];
     maskView.backgroundColor = [UIColor colorWithRed:0 green:0 blue:0 alpha:self.alpha];
@@ -79,13 +83,13 @@ static const NSTimeInterval Duration_Interval = 0.3;
     [maskView addGestureRecognizer:tapGR];
     self.maskView = maskView;
    
-    if (view.subviews.count) {
+    if ([view isMemberOfClass:[UIWindow class]]) {
+        [view addSubview:maskView];
+        [view addSubview:self];
+    } else {
         UIView *lastView = view.subviews.lastObject;
         [view insertSubview:maskView belowSubview:lastView];
         [view insertSubview:self belowSubview:lastView];
-    } else {
-        [view addSubview:maskView];
-        [view addSubview:self];
     }
 
     self.transform = CGAffineTransformMakeTranslation(0, view.bounds.size.height);
